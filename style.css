@@ -1,0 +1,422 @@
+/* =========================================
+   1. RESET & VARIABLES
+========================================= */
+:root {
+  --color-bg: #ffffff;
+  --color-bg-soft: #f7f7f8;
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b6b6f;
+  --color-primary: #1f2937;
+  --color-accent: #2f6f4f;
+  --color-border: #e5e5e7;
+  --color-white: #ffffff;
+  --color-danger: #c0392b;
+
+  --font-body: "Helvetica Neue", Arial, sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --max-width: 1200px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 40px;
+  --space-5: 64px;
+
+  /* z-index scale: เว้นช่วงทีละ 10 ไว้ให้แทรกภายหลังได้
+     100+ = overlay/modal/toast (ลอยเหนือทุกอย่าง)
+     10-20 = header/navbar/dropdown (ลอยเหนือเนื้อหา)
+     1-5  = element ที่ซ้อนกันเล็กน้อยในเนื้อหาปกติ */
+  --z-toast: 90;
+  --z-modal: 100;
+  --z-header: 20;
+  --z-dropdown: 15;
+  --z-navbar: 10;
+  --z-card-hover: 2;
+  --z-base: 1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+}
+
+/* =========================================
+   2. HEADER / NAVBAR
+========================================= */
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background: var(--color-bg);
+  z-index: var(--z-header); /* 20 → ลอยเหนือเนื้อหาปกติทั้งหมด */
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) 0;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.nav-links a {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-text);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon-btn {
+  position: relative;
+  font-size: 1.1rem;
+  padding: var(--space-1);
+}
+
+.cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-size: 0.65rem;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================
+   3. HERO
+========================================= */
+.hero {
+  background: var(--color-bg-soft);
+  padding: var(--space-5) 0;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: var(--space-2);
+}
+
+.hero p {
+  color: var(--color-text-muted);
+  max-width: 480px;
+  margin: 0 auto var(--space-3);
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-block {
+  width: 100%;
+  text-align: center;
+}
+
+/* =========================================
+   4. PRODUCT GRID (หน้าแรก)
+========================================= */
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-3);
+}
+
+.product-section {
+  padding: var(--space-5) 0;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.product-card {
+  position: relative; /* ต้องมี position ก่อน z-index ถึงจะมีผล */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  z-index: var(--z-card-hover); /* 2 → ยกการ์ดที่ hover ให้ลอยเหนือการ์ดข้างๆ เผื่อเงาซ้อนโดนบัง */
+}
+
+.product-card__image {
+  aspect-ratio: 1 / 1;
+  background: var(--color-bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.product-card__body {
+  padding: var(--space-2);
+}
+
+.product-card__name {
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.product-card__price {
+  font-weight: 700;
+}
+
+.product-card__old-price {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  font-size: 0.85rem;
+  margin-left: 6px;
+}
+
+/* =========================================
+   5. PRODUCT DETAIL PAGE
+========================================= */
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: var(--space-2) 0;
+}
+
+.product-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4) 0 var(--space-5);
+}
+
+.product-detail__gallery {
+  aspect-ratio: 1 / 1;
+  background: var(--color-bg-soft);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.product-detail__title {
+  font-size: 1.8rem;
+  margin-bottom: var(--space-1);
+}
+
+.product-detail__price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: var(--space-2) 0;
+}
+
+.product-detail__desc {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.qty-selector button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  cursor: pointer;
+}
+
+.qty-selector input {
+  width: 48px;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  height: 32px;
+}
+
+/* =========================================
+   6. CART PAGE
+========================================= */
+.cart-page {
+  padding: var(--space-4) 0 var(--space-5);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-4);
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cart-item__image {
+  width: 80px;
+  height: 80px;
+  background: var(--color-bg-soft);
+  border-radius: var(--radius-sm);
+}
+
+.cart-item__remove {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.cart-summary {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  height: fit-content;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+.summary-row--total {
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* =========================================
+   7. FOOTER
+========================================= */
+.site-footer {
+  background: var(--color-bg-soft);
+  padding: var(--space-4) 0;
+  margin-top: var(--space-5);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.footer-grid h4 {
+  font-size: 0.9rem;
+  margin-bottom: var(--space-2);
+}
+
+.footer-grid a {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+/* =========================================
+   8. RESPONSIVE
+========================================= */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  .product-detail,
+  .cart-page {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
